@@ -1,0 +1,7 @@
+# Vim files
+*.swp
+
+# creduce products
+mwe
+mwe.best
+mwe.orig

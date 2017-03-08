@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Cleanup from previous attempts, and ensure we don't dump core
+ulimit -S -c 0
 rm -f ./mwe
 
 # First, compile 
