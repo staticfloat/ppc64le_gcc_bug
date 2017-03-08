@@ -5,6 +5,11 @@ rm -f ./mwe
 # First, compile 
 gcc -O3 mwe.c *.i *.a -lm -lpthread -lgomp -o mwe
 
+if [[ "$?" != "0" ]]; then
+	echo "This doesn't even compile!"
+	exit 1
+fi
+
 # Next, run
 ./mwe
 
