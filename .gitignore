@@ -3,5 +3,5 @@
 
 # creduce products
 mwe
-mwe.best
-mwe.orig
+*.best
+*.orig
