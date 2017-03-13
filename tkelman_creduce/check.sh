@@ -2,10 +2,10 @@
 
 # Cleanup from previous attempts, and ensure we don't dump core
 ulimit -S -c 0
-rm -f ./mwe
+rm -f ./mwe_O0 ./mwe_O2
 
 # First, compile working
-gcc -O0 mwe.c *.i /src/mwe/*.a -lm -lpthread -lgomp -o mwe
+gcc -g -O0 /src/mwe/tkelman_creduce/mwe.c *.i /src/mwe/*.a -lm -lpthread -lgomp -o mwe_O0
 
 if [[ "$?" != "0" ]]; then
 	echo "This doesn't even compile with -O0!"
@@ -13,15 +13,14 @@ if [[ "$?" != "0" ]]; then
 fi
 
 # Ensure it runs with no problems
-./mwe
+./mwe_O0
 if [[ "$?" != "0" ]]; then
 	echo "Running with -O0 didn't work!"
 	exit 1
 fi
-rm -f ./mwe
 
 # Next, compile broken
-gcc -O2 -ftree-slp-vectorize mwe.c *.i /src/mwe/*.a -lm -lpthread -lgomp -o mwe
+gcc -g -O2 -ftree-slp-vectorize /src/mwe/tkelman_creduce/mwe.c *.i /src/mwe/*.a -lm -lpthread -lgomp -o mwe_O2
 
 if [[ "$?" != "0" ]]; then
 	echo "This doesn't even compile with -O2!"
@@ -29,7 +28,7 @@ if [[ "$?" != "0" ]]; then
 fi
 
 # Next, run
-./mwe
+./mwe_O2
 
 # Ensure we segfaulted
 if [[ "$?" == "139" ]]; then
