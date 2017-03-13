@@ -52,7 +52,20 @@ int main() {
 	check_err(umfpack_zl_get_numeric(Lp, Lj, Lx, Lz, Up, Ui, Ux, Uz, P, Q, Dx, Dz, &do_recip, Rs, (void *)numeric), "umf_zl_get_numeric");
 
 	
-	// Write out Numeric structure that we care about
-	FILE * n = fopen("numeric_out.dat", "wb");
-	//fwrite(n, 
+	// Write out LU factorization so that we can check it's correct
+	FILE * n = fopen("mwe_LU.dat", "wb");
+	fwrite(Lp, sizeof(Int)*(n_row+1), 1, n);
+	fwrite(Lj, sizeof(Int)*(lnz), 1, n);
+	fwrite(Lx, sizeof(double)*(lnz), 1, n);
+	fwrite(Lz, sizeof(double)*(lnz), 1, n);
+	fwrite(Up, sizeof(Int)*(n_col+1), 1, n);
+	fwrite(Ui, sizeof(Int)*(unz), 1, n);
+	fwrite(Ux, sizeof(double)*(unz), 1, n);
+	fwrite(Uz, sizeof(double)*(unz), 1, n);
+	fwrite(P, sizeof(Int)*(n_row), 1, n);
+	fwrite(Q, sizeof(Int)*(n_col), 1, n);
+	fwrite(Dx, sizeof(Int)*(min(n_row,n_col)), 1, n);
+	fwrite(Dz, sizeof(Int)*(min(n_row,n_col)), 1, n);
+	fwrite(Rs, sizeof(double)*(n_row), 1, n);
+	fclose(n);
 }

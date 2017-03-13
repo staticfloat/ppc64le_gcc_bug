@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 LDFLAGS="-lm -lpthread -lgomp"
 CPPFLAGS="-g -I/src/julia/deps/scratch/SuiteSparse-4.4.5/UMFPACK/Include/ -I/src/julia/deps/scratch/SuiteSparse-4.4.5/UMFPACK/Source -I/src/julia/deps/scratch/SuiteSparse-4.4.5/AMD/Include/ -I/src/julia/deps/scratch/SuiteSparse-4.4.5/SuiteSparse_config/ -DZLONG"
@@ -7,7 +6,7 @@ MWE_C="/src/mwe/tkelman_creduce/mwe.c"
 
 # Cleanup from previous attempts, and ensure we don't dump core
 ulimit -S -c 0
-rm -f ./mwe_O0 ./mwe_O2
+rm -f ./mwe_O0 ./mwe_O2 ./mwe_LU.dat
 
 # First, compile working
 gcc -O0 ${CPPFLAGS} -DLONGBLAS="long long" ${MWE_C} *.i /src/mwe/*.a ${LDFLAGS} -o mwe_O0
@@ -23,6 +22,14 @@ if [[ "$?" != "0" ]]; then
 	echo "Running with -O0 didn't work!"
 	exit 1
 fi
+
+# Ensure that the factorized output is the same
+if ! cmp mwe_LU.dat known_good.dat; then
+	echo "The files did not match!"
+	exit 1
+fi
+
+echo "mwe_O0 passed all tests"
 
 # Next, compile broken
 gcc -O2 -ftree-slp-vectorize ${CPPFLAGS} -DLONGBLAS="long long" ${MWE_C} *.i /src/mwe/*.a ${LDFLAGS} -o mwe_O2
