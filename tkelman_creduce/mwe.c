@@ -10,7 +10,7 @@ double umf_info[] = {2.32446e-310,2.32446e-310,2.32446e-310,2.32446e-310,2.32446
 void* tmp;
 void* symbolic;
 int main() {
-umfpack_zl_symbolic(20,20,colptr,rowval,realval,imagval,&tmp,umf_ctrl,umf_info);
-symbolic = tmp;
-return umfpack_zl_numeric(colptr,rowval,realval,imagval,symbolic,&tmp,umf_ctrl,umf_info);
+	umfpack_zl_symbolic(20,20,colptr,rowval,realval,imagval,&tmp,umf_ctrl,umf_info);
+	symbolic = tmp;
+	umfpack_zl_numeric(colptr,rowval,realval,imagval,symbolic,&tmp,umf_ctrl,umf_info);
 }
